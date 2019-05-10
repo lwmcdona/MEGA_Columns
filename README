@@ -1,0 +1,74 @@
+1st Partner: Logan McDonald
+2nd Partner: Veronica Salm
+CMPUT 274 LBL EA2
+Fall 2016
+
+PROJECT TITLE: MEGA Columns
+
+CODE FILENAME: columns.cpp
+
+COLLABORATED CODE: This file was collaboratively developed by both partners, as listed above.
+
+ACCESSORIES:
+1 * Arduino Mega Board (AMG)
+1 * A-B Style USB Cable
+1 * Adafruit 1.8" 18-bit color TFT LCD display
+1 * Sparkfun Thumb Joystick
+1 * Pushbutton
+
+WIRING INSTRUCTIONS: 
+Uses the standard wiring for both the LCD display and joystick as was used in class. The full wiring instructions can be found here: http://ugweb.cs.ualberta.ca/~c274/web/ConcreteComputing/section/adafruit_lcd.htm 
+
+Pushbutton Wiring: 
+Pin 2 <--> Pushbutton <--> GND
+(Note: The pushbutton should be positioned next to the joystick on the breadboard, since the user should be able to control the joystick with one hand and the pushbutton with the other.)
+
+Note: Pin A7 is used to generate a random colour for each block, similar to the way a random key was generated in Assignment 1.
+
+RUNNING THE CODE:
+
+Open a bash terminal. After moving to the correct directory, load the file, compile and upload it using the command "make upload". The serial monitor can be opened using "serial-mon" (though it is not used explicitly in this assignment, it may be used to check that everything has initialized correctly).
+
+GENERAL PROJECT DESCRIPTION: 
+
+MEGA Columns is a loose recreation of the classic puzzle game SEGA Columns on the Arduino. Here is a link to a video sample of the original gameplay: https://www.youtube.com/watch?v=1QZ6Q-1Oh40. 
+
+In our game, the player must use a joystick to control a vertical stack of three blocks as it falls down the screen before placing it onto a growing block tower. The goal of the game is to remove coloured blocks to prevent any one column from reaching the top of the screen. When three or more blocks of the same colour are obtained in a row, column, or diagonal, the sequence of blocks disappears and any blocks above move down to fill the empty spaces. The player must remove blocks to survive as long as possible before any column reaches the top of the screen. 
+
+We also incorporated a levelling system that causes the blocks to fall more quickly as the user levels up, and a score that is proportional to the number of blocks removed. 
+
+GAMEPLAY AND FEATURES: 
+
+The game starts with a menu screen that encourages the user to press the joystick button to start the game. The joystick must be both pressed and released before the game will continue.
+
+Next, the user must select the difficulty of play. Each level (easy, normal, hard, and extreme) of difficulty corresponds to the number of possible block colours. More colours increases the difficulty by making it harder to get 3 or more of the same colour in a row, diagonal, or column.
+EASY = 3 colours (Green, Blue, Orange)
+NORMAL = 4 colours (Green, Blue, Orange, Magenta)
+HARD = 5 colours (Green, Blue, Orange, Magenta, Yellow)
+EXTREME = 6 colours (Green, Blue, Orange, Magenta, Yellow, Cyan)
+
+It is game over if any block reaches the level of the red bar, which flashes at the beginning of the game as a warning. The game ignores user action until after the flashing is complete and the word "start" has appeared on the screen.
+
+At that point, the first stack of three blocks appears on the screen. 
+- The joystick can be moved horizontally to shift the stack from column to column. 
+- The joystick can be moved vertically down to cause the blocks to drop more rapidly.
+- Pressing the joystick button causes the game to pause, freezing it until the joystick is pressed and then released a second time. 
+- The external pushbutton can be used to change the order of the three colours in the stack. Each time the button is pressed, the top colours in the stack moves down and the bottom colour shifts to replace the top one.
+
+The In-Game Menu:
+- LEVEL: The blocks fall more quickly every level (default falling speed increases) and the level increases for every minute of survival. There are 10 levels before the max falling speed is reached. At this point, the words "MAX SPEED" appear on screen. Level increases after this point will not change the falling speed.
+- SCORE: The score is directly related to the number of blocks eliminated. For every block that is removed, the score increases using the following formula: score = score + level.
+- NEXT: A preview of the next block is displayed on screen.
+
+NOTES, PROBLEM AREAS, AND GENERAL ASSUMPTIONS:
+
+It is assumed that the user is not touching the joystick or button when the program starts (before the joystick is calibrated).
+
+The most difficult part of the project was the system used to check whether there were three or more consecutive blocks in a row. We used a second colour code array and worked hard to make our checking system as efficient as possible.
+
+We used only one file for our project because almost every function is somehow related to our two global arrays, BlkMap[6][15] (which stores the colours of the blocks) and ColCode[6][15] (a boolean array which stores consecutive colour sequences as 1s before they are removed).
+
+There is also no functionality for saving game state or high score.
+
+Note: I (Veronica) have occasionally had trouble with the TFT display freezing, but as Logan has not had this problem, we think this may be because of my TFT display and not the result of our code. When this has happened, the game has continued to run according to print statements on the serial monitor, but prints nothing to the TFT screen. It worked fine using Logan's Arduino for the in-class demo.
+
